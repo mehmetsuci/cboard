@@ -344,6 +344,8 @@
   "cboard.components.Settings.Language.ukrainian": "Ukraina",
   "cboard.components.Settings.Language.vietnamese": "Vietnam",
   "cboard.components.Settings.Language.chinese": "Cina",
+  "cboard.components.Settings.Language.ttsEngines": "Mesin teks ke suara",
+  "cboard.components.Settings.Language.ttsEngineError": "PERINGATAN: Mesin text to speech ini tidak menyertakan bahasa yang didukung oleh Cboard !. Jangan ragu untuk menghubungi kami dan beri tahu kami.",
   "cboard.components.UserIcon.login": "Masuk atau mendaftar",
   "cboard.components.VoiceRecorder.play": "Putar rekaman",
   "cboard.components.VoiceRecorder.clear": "Hapus rekaman",

@@ -6,7 +6,10 @@ import {
   CHANGE_VOLUME,
   START_SPEECH,
   END_SPEECH,
-  EMPTY_VOICES
+  EMPTY_VOICES,
+  RECEIVE_TTS_ENGINES,
+  RECEIVE_TTS_DEFAULT_ENGINE,
+  RECEIVE_TTS_ENGINE
 } from './SpeechProvider.constants';
 import { getVoiceURI } from '../../i18n';
 import { CHANGE_LANG } from '../LanguageProvider/LanguageProvider.constants';
@@ -15,6 +18,9 @@ import { DEFAULT_LANG } from '../../components/App/App.constants';
 
 const initialState = {
   voices: [],
+  ttsEngines: [],
+  ttsDefaultEngine: {},
+  ttsEngine: {},
   langs: [],
   options: {
     lang: '',
@@ -43,10 +49,15 @@ function speechProviderReducer(state = initialState, action) {
       };
     case RECEIVE_VOICES:
       const langs = [...new Set(action.voices.map(voice => voice.lang))];
-      //hack just for Alfanum Serbian voices 
+      //hack just for Alfanum Serbian voices
       //https://github.com/cboard-org/cboard/issues/715
       if (langs.includes('sr-RS')) {
         langs.push('sr-SP');
+      }
+      //hack just for Tetum language
+      //https://github.com/cboard-org/cboard/issues/848
+      if (langs.includes('pt-BR') || langs.includes('pt-PT')) {
+        langs.push('pt-TL');
       }
       return {
         ...state,
@@ -62,8 +73,27 @@ function speechProviderReducer(state = initialState, action) {
           lang: action ? action.lang : DEFAULT_LANG
         }
       };
+    case RECEIVE_TTS_ENGINES:
+      return {
+        ...state,
+        ttsEngines: action.ttsEngines
+      };
+    case RECEIVE_TTS_DEFAULT_ENGINE:
+      return {
+        ...state,
+        ttsDefaultEngine: action.ttsDefaultEngine,
+        ttsEngine: state.ttsEngine ? state.ttsEngine : action.ttsDefaultEngine
+      };
+    case RECEIVE_TTS_ENGINE:
+      const newTtsEngine = state.ttsEngines.find(
+        engine => engine.name === action.ttsEngineName
+      );
+      return {
+        ...state,
+        ttsEngine: newTtsEngine ? newTtsEngine : state.ttsEngine
+      };
     case CHANGE_LANG:
-      //hack just for Alfanum Serbian voices 
+      //hack just for Alfanum Serbian voices
       //https://github.com/cboard-org/cboard/issues/715
       if (action.lang === 'sr-SP' || action.lang === 'sr-RS') {
         const language = 'sr-RS';
